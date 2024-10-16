@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permintaan Maaf</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gamau-button {
+            transition: transform 0.2s;
+        }
+
+        .gamau-button:hover {
+            transform: translate(calc(100px + 1rem), calc(100px + 1rem));
+        }
+
+        #message {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div class="bg-white shadow-lg rounded-lg p-8 max-w-md text-center">
+        <h1 class="text-2xl font-bold mb-4">Permintaan Maaf</h1>
+        <p class="mb-6">Ka ayoo temenin nelpon sambil nugas</p>
+        <div class="flex justify-around">
+            <button id="ayok" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+                Ayok
+            </button>
+            <button id="gamau" class="gamau-button bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
+                Gamau
+            </button>
+        </div>
+        <p id="message" class="mt-4 text-red-600"></p>
+    </div>
+
+    <script>
+        const gamauButton = document.getElementById('gamau');
+        const ayokButton = document.getElementById('ayok');
+        const message = document.getElementById('message');
+        let firstHover = true;
+
+        ayokButton.addEventListener('click', () => {
+            // Langsung membuka WhatsApp dengan pesan "Ayo telpon"
+            const message = encodeURIComponent('Ayo telpon');
+            window.open(`https://wa.me/6285221454357?text=${message}`, '_blank'); // Format internasional
+        });
+
+        gamauButton.addEventListener('click', () => {
+            alert('Tombol "Gamau" tidak bisa dipilih lagi!');
+        });
+
+        gamauButton.addEventListener('mouseenter', () => {
+            if (firstHover) {
+                // Menampilkan pesan setelah 4 detik
+                setTimeout(() => {
+                    message.textContent = "Gabisa di klik kan wkwkwk ayoo telpon";
+                    message.style.display = 'block';
+                }, 4000);
+                firstHover = false; // Set flag untuk memastikan pesan hanya muncul sekali
+            }
+            const randomX = Math.floor(Math.random() * 200) - 100; // 200px pergeseran maksimal
+            const randomY = Math.floor(Math.random() * 200) - 100; // 200px pergeseran maksimal
+            gamauButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+    </script>
+</body>
+
+</html>
