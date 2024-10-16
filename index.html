@@ -11,10 +11,6 @@
             transition: transform 0.2s;
         }
 
-        .gamau-button:hover {
-            transform: translate(calc(100px + 1rem), calc(100px + 1rem));
-        }
-
         #message {
             display: none;
         }
@@ -41,8 +37,6 @@
         const ayokButton = document.getElementById('ayok');
         const message = document.getElementById('message');
         let firstHover = true;
-        let hoverCount = 0; // Hitung jumlah hover pada tombol Gamau
-        const maxHovers = 5; // Batas jumlah hover yang diperbolehkan
 
         ayokButton.addEventListener('click', () => {
             // Langsung membuka WhatsApp dengan pesan "Ayo telpon"
@@ -51,31 +45,39 @@
         });
 
         gamauButton.addEventListener('click', () => {
-            if (hoverCount < maxHovers) {
-                alert('Tombol "Gamau" tidak bisa dipilih lagi!');
-            }
+            alert('Tombol "Gamau" tidak bisa dipilih lagi!');
         });
 
         gamauButton.addEventListener('mouseenter', () => {
             if (firstHover) {
                 // Menampilkan pesan setelah 4 detik
-                setTimeout(() => {
-                    message.textContent = "Gabisa di klik kan wkwkwk ayoo telpon";
-                    message.style.display = 'block';
-                }, 4000);
+              
                 firstHover = false; // Set flag untuk memastikan pesan hanya muncul sekali
             }
-            hoverCount++; // Tambahkan jumlah hover
-            const randomX = Math.floor(Math.random() * 200) - 100; // 200px pergeseran maksimal
-            const randomY = Math.floor(Math.random() * 200) - 100; // 200px pergeseran maksimal
-            gamauButton.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
 
-            // Cek apakah jumlah hover sudah mencapai batas maksimum
-            if (hoverCount >= maxHovers) {
-                gamauButton.removeEventListener('mouseenter', arguments.callee); // Hentikan event hover
-                gamauButton.style.pointerEvents = 'none'; // Nonaktifkan klik pada tombol
-                gamauButton.classList.add('opacity-50'); // Ganti tampilan tombol menjadi transparan
-                message.textContent = "Tombol sudah tidak bisa diklik lagi!";
+        // Event mousemove pada seluruh halaman
+        document.addEventListener('mousemove', (e) => {
+            const buttonRect = gamauButton.getBoundingClientRect();
+            const distanceX = e.clientX - (buttonRect.left + buttonRect.width / 2);
+            const distanceY = e.clientY - (buttonRect.top + buttonRect.height / 2);
+            const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+            // Jika kursor mendekati tombol, geser tombol menjauh
+            if (distance < 150) { // Batas jarak 150px
+                const offsetX = distanceX > 0 ? 100 : -100; // Menjauh secara horizontal
+                const offsetY = distanceY > 0 ? 100 : -100; // Menjauh secara vertikal
+                let newX = buttonRect.left + offsetX;
+                let newY = buttonRect.top + offsetY;
+
+                // Cegah tombol keluar dari layar
+                const maxX = window.innerWidth - buttonRect.width;
+                const maxY = window.innerHeight - buttonRect.height;
+
+                newX = Math.max(0, Math.min(newX, maxX));
+                newY = Math.max(0, Math.min(newY, maxY));
+
+                gamauButton.style.transform = `translate(${newX - buttonRect.left}px, ${newY - buttonRect.top}px)`;
             }
         });
     </script>
